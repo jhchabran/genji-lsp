@@ -92,7 +92,8 @@ export function activate(context: ExtensionContext) {
 		'languageServerExample',
 		'Language Server Example',
 		{
-			command: path.resolve(__dirname, '..', '..', '..', '..', 'cmd', 'genjilsp','genjilsp')
+			// command: path.resolve(__dirname, '..', '..', '..', '..', 'cmd', 'genjilsp','genjilsp')
+			command: 'genjilsp',
 		},
 		clientOptions
 	);
