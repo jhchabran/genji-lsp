@@ -38,25 +38,6 @@ let crashCount = 0;
 export let serverOutputChannel: vscode.OutputChannel;
 
 export function activate(context: ExtensionContext) {
-	// The server is implemented in node
-	const serverModule = context.asAbsolutePath(
-		path.join('server', 'qlsp')
-	);
-	// The debug options for the server
-	// --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
-	const debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
-
-	// If the extension is launched in debug mode then the debug server options are used
-	// Otherwise the run options are used
-	const serverOptions: ServerOptions = {
-		run: { module: serverModule, transport: TransportKind.socket },
-		debug: {
-			module: serverModule,
-			transport: TransportKind.socket,
-			options: debugOptions
-		}
-	};
-
 	// Options to control the language client
 	const clientOptions: LanguageClientOptions = {
 		// Register the server for plain text documents
@@ -65,12 +46,12 @@ export function activate(context: ExtensionContext) {
 			// Notify the server about file changes to '.clientrc files contained in the workspace
 			fileEvents: workspace.createFileSystemWatcher('**/.sql')
 		},
-		outputChannel: vscode.window.createOutputChannel('qlsp (server)'),
-		traceOutputChannel: vscode.window.createOutputChannel('qlsp'),
+		outputChannel: vscode.window.createOutputChannel('genjilsp (server)'),
+		traceOutputChannel: vscode.window.createOutputChannel('genjilsp'),
 		errorHandler: {
 			error: (error: Error, message: Message, count: number): ErrorAction => {
 				// Allow 5 crashes before shutdown.
-				if (count < 15) {
+				if (count < 5) {
 					return ErrorAction.Continue;
 				}
 				vscode.window.showErrorMessage(
@@ -81,7 +62,7 @@ export function activate(context: ExtensionContext) {
 			closed: (): CloseAction => {
 				// Allow 5 crashes before shutdown.
 				crashCount++;
-				if (crashCount < 15) {
+				if (crashCount < 5) {
 					return CloseAction.Restart;
 				}
 
@@ -111,7 +92,7 @@ export function activate(context: ExtensionContext) {
 		'languageServerExample',
 		'Language Server Example',
 		{
-			command: path.resolve(__dirname, '..', '..', 'server', 'genjilsp')
+			command: path.resolve(__dirname, '..', '..', '..', '..', 'cmd', 'genjilsp','genjilsp')
 		},
 		clientOptions
 	);
